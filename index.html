@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tap Music</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff; /* White background */
+            color: #333; /* Dark text color for contrast */
+            overflow: hidden;
+        }
+
+        h1 {
+            margin-top: 40px;
+            font-size: 36px;
+            color: #333; /* Darker text color */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        p {
+            margin: 0;
+            font-size: 18px;
+            color: #555; /* Slightly lighter text color */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        #container {
+            display: flex;
+            justify-content: center; /* Center the keys horizontally */
+            width: 100%;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+
+        .key {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px; /* Rounded corners */
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Light shadow */
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-color: #ddd; /* Default color for keys */
+            margin: 0 10px; /* Space between keys */
+        }
+
+        .key:active {
+            transform: scale(0.95);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .key:before {
+            content: '🎵';
+            position: absolute;
+            font-size: 40px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .key.playing:before {
+            transform: translate(-50%, -50%) scale(1.2);
+            opacity: 1;
+        }
+
+        #key1 { background-image: radial-gradient(circle, #ff6666, #b30000); }
+        #key2 { background-image: radial-gradient(circle, #ffcc66, #b36b00); }
+        #key3 { background-image: radial-gradient(circle, #a3a3ff, #4d0099); }
+        #key4 { background-image: radial-gradient(circle, #d9d900, #666600); }
+        #key5 { background-image: radial-gradient(circle, #66a3ff, #0033cc); }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            .key {
+                width: 80px;
+                height: 80px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+
+            #container {
+                flex-direction: column; /* Stack keys vertically on small screens */
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Tap Music</h1>
+        <p>Make music with a single tap</p>
+    </div>
+    <div id="container">
+        <div class="key" id="key1"></div>
+        <div class="key" id="key2"></div>
+        <div class="key" id="key3"></div>
+        <div class="key" id="key4"></div>
+        <div class="key" id="key5"></div>
+    </div>
+
+    <script>
+        // Define sounds for each key
+        const sounds = {
+            key1: new Audio('sound1.mp3'),
+            key2: new Audio('sound2.mp3'),
+            key3: new Audio('sound3.mp3'),
+            key4: new Audio('sound4.mp3'),
+            key5: new Audio('sound2.mp3') // Reuses sound2 for key5
+        };
+
+        // Function to play sound and animate the key
+        function playSound(event) {
+            const key = event.target.id;
+            const keyElement = document.getElementById(key);
+            if (sounds[key]) {
+                sounds[key].currentTime = 0; // Reset sound to the start
+                sounds[key].play();
+                keyElement.classList.add('playing');
+                setTimeout(() => keyElement.classList.remove('playing'), 300); // Remove animation after 300ms
+            }
+        }
+
+        // Add event listeners to each key
+        document.querySelectorAll('.key').forEach(key => {
+            key.addEventListener('click', playSound);
+        });
+    </script>
+</body>
+</html>
